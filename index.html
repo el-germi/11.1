@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizaciones</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+
+    <script defer>
+        const API = "https://www5.ine.gub.uy/documents/Estad%C3%ADsticasecon%C3%B3micas/SERIES%20Y%20OTROS/Cotizaci%C3%B3n%20de%20monedas/Cotizaci%C3%B3n%20monedas.xlsx"
+        const url = 'https://corsproxy.io/?' + encodeURIComponent(API);//CORS bypass
+
+        //https://github.com/exceljs/exceljs
+        var book = new ExcelJS.Workbook();
+        fetch(url)
+            .then(res => res.arrayBuffer())
+            .then(bb => {
+                book.xlsx.load(bb)
+                    .then(() => {
+                        var sheet = book.getWorksheet("Cotización al público")
+                        var i = 5400;
+                        while (sheet.getCell('A' + i).value)
+                            i++;
+                        i--;
+                        console.log(i);
+                        document.getElementById("dc").innerHTML = Number.parseFloat(sheet.getCell('D' + i).value).toFixed(2);
+                        document.getElementById("dv").innerHTML = Number.parseFloat(sheet.getCell('E' + i).value).toFixed(2);
+                        document.getElementById("ec").innerHTML = Number.parseFloat(sheet.getCell('J' + i).value).toFixed(2);
+                        document.getElementById("ev").innerHTML = Number.parseFloat(sheet.getCell('K' + i).value).toFixed(2);
+                        document.getElementById("ac").innerHTML = Number.parseFloat(sheet.getCell('M' + i).value).toFixed(2);
+                        document.getElementById("av").innerHTML = Number.parseFloat(sheet.getCell('N' + i).value).toFixed(2);
+                        document.getElementById("rc").innerHTML = Number.parseFloat(sheet.getCell('P' + i).value).toFixed(2);
+                        document.getElementById("rv").innerHTML = Number.parseFloat(sheet.getCell('Q' + i).value).toFixed(2);
+                    })
+            })
+    </script>
+    <style>
+        img {
+            width: 100px;
+        }
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="">Pizarra</h1>
+    <p class="">Exctracto del codigo desarrollado para un trabajo Freelance, extrae las cotizaciones de una <a
+            href="https://www5.ine.gub.uy/documents/Estad%C3%ADsticasecon%C3%B3micas/SERIES%20Y%20OTROS/Cotizaci%C3%B3n%20de%20monedas/Cotizaci%C3%B3n%20monedas.xlsx">API
+            del BROU</a> que devuelve valores historicos de cotizacion, hasta el presente. la informacion esta en un
+        archivo de excel, la cual es interpretada por <a href="https://www.npmjs.com/package/exceljs">ExcelJs</a>
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>·</th>
+                <th> - Compra - </th>
+                <th> - Venta - </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div>
+                        <img src="img/us.webp" alt="Dolar">
+                        <br>
+                        <p>Dolar</p>
+                    </div>
+                </td>
+                <td id="dc">Loading...</td>
+                <td id="dv">Loading...</td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <img src="img/eu.png" alt="Euro">
+                        <br>
+                        <p>Euro</p>
+                    </div>
+                </td>
+                <td id="ec">Loading...</td>
+                <td id="ev">Loading...</td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <img src="img/arg.png" alt="Peso Arg">
+                        <br>
+                        <p>Peso Arg</p>
+                    </div>
+                </td>
+                <td id="ac">Loading...</td>
+                <td id="av">Loading...</td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <img src="img/br.png" alt="Real">
+                        <br>
+                        <p>Real</p>
+                    </div>
+                </td>
+                <td id="rc">Loading...</td>
+                <td id="rv">Loading...</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
